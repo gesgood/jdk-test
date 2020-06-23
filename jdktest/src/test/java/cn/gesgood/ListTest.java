@@ -4,9 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class ListTest {
 
@@ -18,6 +16,10 @@ public class ListTest {
         list.add("2");
 
         Assert.assertEquals("[1, 3, 2]", list.toString());
+
+        ListIterator<String> listItr = list.listIterator(list.size() );
+        Assert.assertFalse(listItr.hasNext());
+
 
         List<String> linklist = new LinkedList<String>();
         linklist.add("1");
@@ -64,5 +66,46 @@ public class ListTest {
 
         Assert.assertEquals("bug", pList.get(3));
         System.out.println(pList);
+    }
+
+    @Test
+    public void testItr() {
+        List<String> ll = new LinkedList<String>();
+        ll.add("hello");
+        ((LinkedList<String>) ll).addFirst("world");
+        ll.add("java");
+
+        Iterator<String> itr = ((LinkedList<String>) ll).descendingIterator();
+        //        while (itr.hasNext()) {
+//            System.out.println(itr.next());
+//        }
+        for (String s = itr.next(); itr.hasNext(); ) {
+            System.out.println(s);
+            System.out.println(itr.next());
+        }
+    }
+
+    @Test(expected=ConcurrentModificationException.class)
+    public void testAddAll() {
+        final List<String> ll = new LinkedList<String>();
+        String sayHi = "Hello all, this is a test for linked list.";
+        for (String s : sayHi.split("[,.\\s]+")) {
+            ll.add(s);
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i =0; i< 100; i++) {
+                    ll.add(i+"");
+                }
+            }
+        }).start();
+        List<String> anoll = new LinkedList<String>();
+//        anoll.addAll(ll);
+        for (String s : ll) {
+            anoll.add(s);
+        }
+        System.out.println(anoll.size());
     }
 }
