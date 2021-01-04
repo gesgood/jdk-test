@@ -108,4 +108,17 @@ public class ListTest {
         }
         System.out.println(anoll.size());
     }
+    
+    @Test public void testTypeRef() {
+    	List<String> stringList = new ArrayList<>();
+    	stringList.add("A");
+    	stringList.addAll(Arrays.<String>asList());
+    	stringList.addAll(Arrays.asList());
+    }
+    
+    @Test public void testPECS() {
+    	List<? extends Number> list = new ArrayList<Long>();
+//    	list.add(1L);
+//    	list.add((Number)Long.valueOf(1));
+    }
 }
